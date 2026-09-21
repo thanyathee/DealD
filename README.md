@@ -129,11 +129,11 @@ DealD/
 ├── README.md
 │
 ├── assets/
+│   ├── logo.png            # Master Logo (1024×1024) ต้นฉบับของไอคอนทุกขนาด
 │   └── icons/
-│       ├── icon.svg                 # ไอคอนหลัก (favicon แบบ SVG)
 │       ├── favicon-32.png
-│       ├── apple-touch-icon.png     # 180×180 สำหรับ iOS
-│       ├── icon-192.png
+│       ├── apple-touch-icon.png     # 180×180 พื้นทึบ สำหรับ iOS
+│       ├── icon-192.png             # ใช้เป็นโลโก้บน header ด้วย
 │       ├── icon-512.png
 │       └── icon-maskable-512.png    # ไอคอนแบบ maskable สำหรับ Android
 │
@@ -141,6 +141,20 @@ DealD/
     └── workflows/
         └── deploy.yml      # deploy ขึ้น GitHub Pages อัตโนมัติ
 ```
+
+---
+
+## แบรนด์
+
+| | ค่า |
+|---|---|
+| Master Logo | `assets/logo.png` (1024×1024) |
+| สีหลัก (Navy) | `#011A4F` |
+| สีรอง (Lime) | `#B5FC6D` |
+| สีปุ่มหลัก | `#16A34A` |
+
+ไอคอนทุกขนาดใน `assets/icons/` สร้างจาก `assets/logo.png` หากเปลี่ยนโลโก้
+ต้องสร้างไอคอนชุดใหม่ให้ครบทุกขนาด
 
 ---
 

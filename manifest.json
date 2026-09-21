@@ -10,8 +10,12 @@
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",
-  "theme_color": "#16a34a",
-  "categories": ["shopping", "utilities", "finance"],
+  "theme_color": "#011a4f",
+  "categories": [
+    "shopping",
+    "utilities",
+    "finance"
+  ],
   "icons": [
     {
       "src": "./assets/icons/icon-192.png",
