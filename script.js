@@ -274,7 +274,6 @@
     var row = document.createElement('div');
     row.className = 'result-row' +
       (options.highlight ? ' is-highlight' : '') +
-      (options.stacked ? ' is-stacked' : '') +
       (options.muted ? ' is-muted' : '');
 
     var dt = document.createElement('dt');
@@ -335,7 +334,7 @@
     addRow(
       'ถ้าซื้อ' + best.labelFull + ' (' + formatNumber(best.units, 4, 0) + ' หน่วย) จะประหยัด',
       formatNumber(saving) + ' บาท',
-      { stacked: true, highlight: true }
+      { highlight: true }
     );
   }
 

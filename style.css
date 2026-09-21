@@ -87,7 +87,8 @@ body {
 .control {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 8px;
   margin-bottom: 10px;
 }
 
@@ -101,7 +102,7 @@ body {
 .select-wrap::after {
   content: "";
   position: absolute;
-  right: 12px;
+  right: 11px;
   top: 50%;
   width: 8px;
   height: 8px;
@@ -116,8 +117,9 @@ body {
   -webkit-appearance: none;
   appearance: none;
   min-height: 44px;
-  min-width: 76px;
-  padding: 0 32px 0 14px;
+  min-width: 0;
+  padding: 0 30px 0 14px;
+  text-align: center;
   font: inherit;
   font-size: 16px;
   font-weight: 700;
@@ -155,8 +157,12 @@ body {
   font-weight: 700;
   line-height: 1.25;
   color: var(--ink-700);
-  text-align: center;
+  text-align: right;
 }
+
+/* สองคอลัมน์กลางเยื้องเท่ากับ padding ของช่องกรอก ตัวอักษรจะตรงกับตัวเลขพอดี */
+.table-head span:nth-child(2),
+.table-head span:nth-child(3) { padding-right: 8px; }
 
 .table-head span {
   min-width: 0;
@@ -376,9 +382,9 @@ body {
 
 .result-row.is-muted dd { color: var(--ink-300); }
 
-/* แถวที่ข้อความยาว ให้ขึ้นบรรทัดใหม่แทนการเลื่อนซ้ายขวา */
-.result-row.is-stacked { display: block; }
-.result-row.is-stacked dd { margin-top: 2px; text-align: right; }
+/* ค่าตัวเลขห้ามหดจนตกบรรทัด ส่วนข้อความยาวให้ตัดขึ้นบรรทัดใหม่ได้ */
+.result-row dt { min-width: 0; }
+.result-row dd { flex: none; }
 
 /* ---------- อื่น ๆ ---------- */
 
@@ -401,15 +407,16 @@ body {
   .input { padding: 10px 6px; }
   .control-label,
   .control-suffix { font-size: 14.5px; }
-  .result-row { display: block; }
-  .result-row dd { margin-top: 1px; text-align: right; }
 }
 
 /* ---------- มี 4-5 แบบ บีบระยะลงอีกขั้น ---------- */
 
 body:has(#items > .item-row:nth-child(4)) .item-row { padding: 2px 0; }
 body:has(#items > .item-row:nth-child(4)) .result-row { padding: 3px 0; }
-body:has(#items > .item-row:nth-child(4)) .container { padding-top: 8px; }
+body:has(#items > .item-row:nth-child(4)) .container {
+  padding-top: 8px;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+}
 
 /* ---------- จอสูงและมีไม่เกิน 3 แบบ ค่อยผ่อนระยะให้หายใจ ----------
    ใช้ :has() นับจำนวนแถว ถ้าเบราว์เซอร์ไม่รองรับจะตกไปใช้ระยะแบบแน่น
