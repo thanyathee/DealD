@@ -19,6 +19,7 @@
   <meta name="format-detection" content="telephone=no">
 
   <link rel="icon" href="./assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="./assets/icons/favicon-16.png" sizes="16x16" type="image/png">
   <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
 
   <link rel="stylesheet" href="./style.css">
@@ -26,35 +27,34 @@
 <body>
 
   <header class="header">
-    <h1 class="brand">
-      <img class="brand-logo" src="./assets/icons/icon-192.png"
-           alt="DealD" width="88" height="88" decoding="async">
-    </h1>
-    <p class="tagline">เปรียบเทียบราคา ง่าย ๆ</p>
+    <img class="brand-logo" src="./assets/icons/icon-192.png"
+         alt="DealD" width="40" height="40" decoding="async">
+    <h1 class="brand-title">เปรียบเทียบราคา ง่าย ๆ</h1>
   </header>
 
   <main class="container">
 
     <form id="compare-form" novalidate>
 
-      <div class="card control-card">
+      <div class="control">
         <label class="control-label" for="count">เปรียบเทียบราคา</label>
         <div class="select-wrap">
-          <select id="count" name="count" class="select">
-            <option value="2" selected>2 แบบ</option>
-            <option value="3">3 แบบ</option>
-            <option value="4">4 แบบ</option>
-            <option value="5">5 แบบ</option>
+          <select id="count" name="count" class="select" aria-describedby="count-suffix">
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
           </select>
         </div>
+        <span class="control-suffix" id="count-suffix">แบบ</span>
       </div>
 
-      <div class="card table-card">
+      <div class="table">
         <div class="table-head" aria-hidden="true">
           <span></span>
           <span>ราคา</span>
           <span>จำนวนหน่วย</span>
-          <span>ราคา/หน่วย</span>
+          <span>ราคาต่อหน่วย</span>
         </div>
         <!-- แถวของแต่ละแบบ ถูกสร้างด้วย JavaScript -->
         <div id="items" class="items"></div>
@@ -69,7 +69,7 @@
 
     </form>
 
-    <section id="result" class="card result-card" aria-labelledby="result-title" tabindex="-1" hidden>
+    <section id="result" class="result-card" aria-labelledby="result-title" tabindex="-1">
       <h2 id="result-title" class="result-title">สรุป</h2>
       <p id="result-headline" class="result-headline"></p>
       <dl id="result-rows" class="result-rows"></dl>
@@ -80,10 +80,6 @@
     </noscript>
 
   </main>
-
-  <footer class="footer">
-    <p>DealD · เปรียบเทียบราคาต่อหน่วย ใช้งานได้แบบออฟไลน์</p>
-  </footer>
 
   <script src="./script.js" defer></script>
 </body>

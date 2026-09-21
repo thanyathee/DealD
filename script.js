@@ -20,7 +20,6 @@
   };
 
   var form, itemsEl, countEl, resultEl, headlineEl, rowsEl, formErrorEl, resetBtn;
-  var hasCalculated = false;
 
   /* ---------- ตัวเลข ---------- */
 
@@ -258,7 +257,7 @@
       var el = field(card, 'unit');
       var item = items[i];
       if (item.status === 'ok' && item.unitPrice !== null) {
-        el.textContent = formatNumber(item.unitPrice) + ' บาท';
+        el.textContent = formatNumber(item.unitPrice);
         el.classList.remove('is-empty');
       } else {
         el.textContent = '—';
@@ -275,7 +274,8 @@
     var row = document.createElement('div');
     row.className = 'result-row' +
       (options.highlight ? ' is-highlight' : '') +
-      (options.stacked ? ' is-stacked' : '');
+      (options.stacked ? ' is-stacked' : '') +
+      (options.muted ? ' is-muted' : '');
 
     var dt = document.createElement('dt');
     dt.textContent = term;
@@ -288,10 +288,14 @@
     rowsEl.appendChild(row);
   }
 
-  function hideResult() {
-    resultEl.hidden = true;
-    headlineEl.textContent = '';
+  /* การ์ดสรุปแสดงค้างไว้เสมอ ยังไม่มีข้อมูลพอก็ขึ้นเป็นขีด */
+  function renderWaiting() {
+    headlineEl.textContent = 'กรอกราคาและจำนวนหน่วยอย่างน้อย 2 แบบ';
+    headlineEl.classList.add('is-waiting');
     rowsEl.textContent = '';
+    addRow('ถูกกว่าหน่วยละ', '— บาท', { muted: true });
+    addRow('หรือถูกกว่า', '— %', { muted: true });
+    addRow('จะประหยัด', '— บาท', { muted: true });
   }
 
   function renderResult(valid, totalItems) {
@@ -304,13 +308,13 @@
     });
 
     rowsEl.textContent = '';
+    headlineEl.classList.remove('is-waiting');
 
     var allEqual = (worst.unitPrice - best.unitPrice) < 1e-12;
 
     if (allEqual) {
       headlineEl.textContent = 'ราคาต่อหน่วยเท่ากันทุกแบบ';
       addRow('ราคาต่อหน่วย', formatNumber(best.unitPrice) + ' บาท', { highlight: true });
-      resultEl.hidden = false;
       return;
     }
 
@@ -333,8 +337,6 @@
       formatNumber(saving) + ' บาท',
       { stacked: true, highlight: true }
     );
-
-    resultEl.hidden = false;
   }
 
   /**
@@ -364,7 +366,7 @@
     var valid = items.filter(function (item) { return item.status === 'ok'; });
 
     if (hasError) {
-      hideResult();
+      renderWaiting();
       if (!silent) {
         showFormError(MSG.fixErrors);
         focusFirstInvalid();
@@ -373,7 +375,7 @@
     }
 
     if (valid.length < MIN_ITEMS) {
-      hideResult();
+      renderWaiting();
       if (!silent) {
         showFormError(MSG.needTwo);
         focusFirstEmpty();
@@ -405,7 +407,9 @@
   }
 
   function scrollToResult() {
-    if (resultEl.hidden) return;
+    var box = resultEl.getBoundingClientRect();
+    // อยู่ในจออยู่แล้วก็ไม่ต้องเลื่อน
+    if (box.top >= 0 && box.bottom <= window.innerHeight) return;
     try {
       resultEl.scrollIntoView({
         behavior: prefersReducedMotion() ? 'auto' : 'smooth',
@@ -427,9 +431,8 @@
       field(card, 'units').value = '';
     });
     clearErrors();
-    hideResult();
+    renderWaiting();
     updatePreview();
-    hasCalculated = false;
     try {
       window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
     } catch (e) {
@@ -461,8 +464,7 @@
       if (next > MAX_ITEMS) next = MAX_ITEMS;
       renderItems(next);          // ค่าที่กรอกไว้เดิมยังอยู่ครบ
       clearErrors();
-      if (hasCalculated) calculate(true);
-      else updatePreview();
+      calculate(true);
     });
 
     // preview ราคาต่อหน่วยแบบ realtime
@@ -470,23 +472,17 @@
       if (!event.target.classList.contains('input')) return;
       paintFieldError(event.target.closest('.item-row'),
         event.target.dataset.role === 'price' ? 'price' : 'units', '');
-      if (hasCalculated) {
-        calculate(true);
-      } else {
-        updatePreview();
-      }
+      calculate(true);
     });
 
     form.addEventListener('submit', function (event) {
       event.preventDefault();
-      var ok = calculate(false);
-      hasCalculated = ok;
-      if (ok) scrollToResult();
+      if (calculate(false)) scrollToResult();
     });
 
     resetBtn.addEventListener('click', resetAll);
 
-    updatePreview();
+    calculate(true);
   }
 
   if (document.readyState === 'loading') {
