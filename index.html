@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <title>DealD — เปรียบเทียบราคา ง่าย ๆ</title>
+  <meta name="description" content="DealD เว็บแอปเปรียบเทียบราคาต่อหน่วยแบบง่าย ๆ กรอกราคาและจำนวนหน่วย แล้วดูว่าแบบไหนคุ้มกว่า ใช้งานฟรี ไม่ต้องสมัครสมาชิก">
+
+  <meta name="theme-color" content="#16a34a">
+  <meta name="color-scheme" content="light">
+
+  <!-- PWA / iOS -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="DealD">
+  <meta name="format-detection" content="telephone=no">
+
+  <link rel="icon" href="./assets/icons/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="./assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <header class="header">
+    <h1 class="brand">DEALD</h1>
+    <p class="tagline">เปรียบเทียบราคา ง่าย ๆ</p>
+  </header>
+
+  <main class="container">
+
+    <form id="compare-form" novalidate>
+
+      <div class="card control-card">
+        <label class="control-label" for="count">เปรียบเทียบราคา</label>
+        <div class="select-wrap">
+          <select id="count" name="count" class="select">
+            <option value="2" selected>2 แบบ</option>
+            <option value="3">3 แบบ</option>
+            <option value="4">4 แบบ</option>
+            <option value="5">5 แบบ</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ช่องกรอกแต่ละแบบ ถูกสร้างด้วย JavaScript -->
+      <div id="items" class="items"></div>
+
+      <p id="form-error" class="form-error" role="alert" hidden></p>
+
+      <div class="actions">
+        <button type="button" id="btn-reset" class="btn btn-secondary">ล้าง</button>
+        <button type="submit" id="btn-calc" class="btn btn-primary">คำนวณ</button>
+      </div>
+
+    </form>
+
+    <section id="result" class="card result-card" aria-labelledby="result-title" tabindex="-1" hidden>
+      <h2 id="result-title" class="result-title">สรุป</h2>
+      <p id="result-headline" class="result-headline"></p>
+      <dl id="result-rows" class="result-rows"></dl>
+    </section>
+
+    <noscript>
+      <p class="noscript">DealD ต้องเปิดใช้งาน JavaScript จึงจะคำนวณได้ กรุณาเปิด JavaScript ในเบราว์เซอร์ของคุณ</p>
+    </noscript>
+
+  </main>
+
+  <footer class="footer">
+    <p>DealD · เปรียบเทียบราคาต่อหน่วย ใช้งานได้แบบออฟไลน์</p>
+  </footer>
+
+  <script src="./script.js" defer></script>
+</body>
+</html>
