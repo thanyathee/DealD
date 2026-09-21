@@ -149,50 +149,62 @@ body {
   cursor: pointer;
 }
 
-/* ---------- การ์ดแต่ละแบบ ---------- */
+/* ---------- ตารางเปรียบเทียบ ---------- */
 
-.items { margin: 0; }
+/* ความกว้างคอลัมน์ใช้ร่วมกันระหว่างหัวตารางกับทุกแถว */
+.table-card {
+  padding: 14px 12px;
+}
 
-.item-card { }
+.table-head,
+.item-row {
+  display: grid;
+  grid-template-columns: minmax(38px, auto) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 84px);
+  gap: 8px;
+  align-items: center;
+}
 
-.item-title {
-  margin: 0 0 12px;
-  font-size: 17px;
+.table-head {
+  padding-bottom: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink-700);
+  text-align: center;
+}
+
+.table-head span:last-child { text-align: right; }
+
+.item-row {
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+
+.row-name {
+  font-size: 14.5px;
   font-weight: 700;
   color: var(--ink-900);
+  white-space: nowrap;
 }
 
-.field {
-  margin-bottom: 14px;
-}
+.table-head span { min-width: 0; overflow-wrap: anywhere; }
 
-.field:last-of-type {
-  margin-bottom: 12px;
-}
-
-.field-label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ink-700);
-}
+.row-cell { min-width: 0; }
 
 .input {
   display: block;
   width: 100%;
-  min-height: var(--tap);
-  padding: 12px 14px;
+  min-height: 48px;
+  padding: 10px 8px;
   font: inherit;
   font-size: 16px; /* 16px กัน iOS zoom ตอนโฟกัส */
+  text-align: right;
   color: var(--ink-900);
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   transition: border-color 0.12s ease, box-shadow 0.12s ease;
 }
-
-.input::placeholder { color: #9ca3af; }
 
 .input:focus {
   outline: none;
@@ -209,46 +221,48 @@ body {
   box-shadow: 0 0 0 3px #fee2e2;
 }
 
+.row-unit {
+  min-width: 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--green-700);
+  text-align: right;
+  /* ตัวเลขยาว ๆ ให้ขึ้นบรรทัดใหม่ในคอลัมน์ ไม่ดันหน้าจอให้เลื่อนซ้ายขวา */
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.row-unit.is-empty {
+  color: var(--ink-500);
+  font-weight: 600;
+}
+
+/* ข้อความ error กินความกว้างเต็มแถว */
 .field-error {
-  margin: 6px 0 0;
-  font-size: 13.5px;
+  grid-column: 1 / -1;
+  margin: 2px 0 0;
+  font-size: 13px;
   font-weight: 600;
   color: var(--danger);
 }
 
-/* ไอคอนข้อความ error — ไม่สื่อความหมายด้วยสีอย่างเดียว */
 .field-error::before,
 .form-error::before {
-  content: "⚠ ";
+  content: "\26A0 ";
 }
 
-/* ---------- ราคาต่อหน่วย (preview) ---------- */
-
-.unit-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
-  padding-top: 12px;
-  border-top: 1px dashed var(--line);
-}
-
-.unit-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ink-700);
-}
-
-.unit-value {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--green-700);
-  font-variant-numeric: tabular-nums;
-}
-
-.unit-value.is-empty {
-  color: var(--ink-500);
-  font-weight: 600;
+/* label ที่ซ่อนไว้สำหรับ screen reader */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ---------- ข้อความ error รวมของฟอร์ม ---------- */
@@ -364,7 +378,7 @@ body {
   font-weight: 700;
   color: var(--ink-900);
   text-align: right;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
   font-variant-numeric: tabular-nums;
 }
 
@@ -414,6 +428,10 @@ body {
   .brand-logo { width: 72px; height: 72px; }
   .container { padding: 16px 12px 32px; }
   .card { padding: 16px 14px; }
+  .table-card { padding: 12px 10px; }
+  .table-head { font-size: 12px; gap: 6px; }
+  .item-row { gap: 6px; }
+  .input { padding: 10px 6px; }
   .control-card { flex-direction: column; align-items: stretch; }
   .select { width: 100%; }
   .result-headline { font-size: 20px; }

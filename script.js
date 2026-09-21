@@ -86,48 +86,45 @@
 
   /* ---------- สร้าง/ปรับจำนวนช่องกรอก ---------- */
 
-  function createItemCard(index) {
+  function createItemRow(index) {
     var n = index + 1;
-    var card = document.createElement('section');
-    card.className = 'card item-card';
-    card.dataset.index = String(index);
-    card.setAttribute('aria-labelledby', 'item-title-' + n);
+    var row = document.createElement('div');
+    row.className = 'item-row';
+    row.dataset.index = String(index);
+    row.setAttribute('role', 'group');
+    row.setAttribute('aria-label', 'แบบ ' + n);
 
-    card.innerHTML =
-      '<h2 class="item-title" id="item-title-' + n + '">แบบ ' + n + '</h2>' +
+    row.innerHTML =
+      '<span class="row-name">แบบ ' + n + '</span>' +
 
-      '<div class="field">' +
-        '<label class="field-label" for="price-' + n + '">ราคา</label>' +
+      '<div class="row-cell">' +
+        '<label class="sr-only" for="price-' + n + '">ราคาของแบบ ' + n + '</label>' +
         '<input class="input" id="price-' + n + '" name="price-' + n + '" type="text" ' +
                'inputmode="decimal" autocomplete="off" enterkeyhint="next" ' +
-               'placeholder="เช่น 100" data-role="price" ' +
-               'aria-describedby="price-error-' + n + '">' +
-        '<p class="field-error" id="price-error-' + n + '" data-role="price-error" hidden></p>' +
+               'data-role="price" aria-describedby="price-error-' + n + '">' +
       '</div>' +
 
-      '<div class="field">' +
-        '<label class="field-label" for="units-' + n + '">จำนวนหน่วย</label>' +
+      '<div class="row-cell">' +
+        '<label class="sr-only" for="units-' + n + '">จำนวนหน่วยของแบบ ' + n + '</label>' +
         '<input class="input" id="units-' + n + '" name="units-' + n + '" type="text" ' +
                'inputmode="decimal" autocomplete="off" enterkeyhint="done" ' +
-               'placeholder="เช่น 80" data-role="units" ' +
-               'aria-describedby="units-error-' + n + '">' +
-        '<p class="field-error" id="units-error-' + n + '" data-role="units-error" hidden></p>' +
+               'data-role="units" aria-describedby="units-error-' + n + '">' +
       '</div>' +
 
-      '<div class="unit-row">' +
-        '<span class="unit-label">ราคาต่อหน่วย</span>' +
-        '<span class="unit-value is-empty" data-role="unit" ' +
-              'aria-label="ราคาต่อหน่วยของแบบ ' + n + '">—</span>' +
-      '</div>';
+      '<span class="row-unit is-empty" data-role="unit" ' +
+            'aria-label="ราคาต่อหน่วยของแบบ ' + n + '">—</span>' +
 
-    return card;
+      '<p class="field-error" id="price-error-' + n + '" data-role="price-error" hidden></p>' +
+      '<p class="field-error" id="units-error-' + n + '" data-role="units-error" hidden></p>';
+
+    return row;
   }
 
   function renderItems(count) {
     var current = itemsEl.children.length;
 
     for (var i = current; i < count; i++) {
-      itemsEl.appendChild(createItemCard(i));
+      itemsEl.appendChild(createItemRow(i));
     }
     while (itemsEl.children.length > count) {
       itemsEl.removeChild(itemsEl.lastElementChild);
@@ -158,6 +155,7 @@
     var item = {
       index: index,
       label: 'แบบ ' + (index + 1),
+      labelFull: 'แบบที่ ' + (index + 1),
       errors: { price: '', units: '' },
       status: 'ok',
       price: null,
@@ -317,23 +315,21 @@
     }
 
     headlineEl.textContent = totalItems > 2
-      ? best.label + ' คุ้มที่สุด'
-      : best.label + ' ถูกกว่า';
+      ? best.labelFull + ' คุ้มที่สุด'
+      : best.labelFull + ' ถูกกว่า';
 
     var diff = worst.unitPrice - best.unitPrice;
     var percent = worst.unitPrice > 0 ? (diff / worst.unitPrice) * 100 : 0;
     var saving = best.units * diff;
 
-    addRow('ราคาต่อหน่วยของ' + best.label, formatNumber(best.unitPrice) + ' บาท', { highlight: true });
-
     if (totalItems > 2) {
-      addRow('เทียบกับ' + worst.label + ' (ราคาต่อหน่วยสูงสุด)', formatNumber(worst.unitPrice) + ' บาท');
+      addRow('เทียบกับ' + worst.labelFull + ' (ราคาต่อหน่วยสูงสุด)', formatNumber(worst.unitPrice) + ' บาท');
     }
 
     addRow('ถูกกว่าหน่วยละ', formatNumber(diff) + ' บาท');
     addRow('หรือถูกกว่า', formatPercent(percent) + ' %');
     addRow(
-      'ถ้าซื้อ ' + formatNumber(best.units, 4, 0) + ' หน่วย จะประหยัด',
+      'ถ้าซื้อ' + best.labelFull + ' (' + formatNumber(best.units, 4, 0) + ' หน่วย) จะประหยัด',
       formatNumber(saving) + ' บาท',
       { stacked: true, highlight: true }
     );
@@ -472,7 +468,7 @@
     // preview ราคาต่อหน่วยแบบ realtime
     itemsEl.addEventListener('input', function (event) {
       if (!event.target.classList.contains('input')) return;
-      paintFieldError(event.target.closest('.item-card'),
+      paintFieldError(event.target.closest('.item-row'),
         event.target.dataset.role === 'price' ? 'price' : 'units', '');
       if (hasCalculated) {
         calculate(true);
