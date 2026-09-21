@@ -30,6 +30,9 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          # เปิดใช้งาน GitHub Pages ให้อัตโนมัติถ้ายังไม่ได้เปิดไว้
+          enablement: true
 
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
