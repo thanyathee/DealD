@@ -3,7 +3,7 @@
    ใช้ relative path ทั้งหมด จึงทำงานได้ทั้งที่ root และที่ /DealD/ บน GitHub Pages
    ========================================================================== */
 
-var CACHE_NAME = 'deald-v4';
+var CACHE_NAME = 'deald-v5';
 
 // path เหล่านี้ resolve เทียบกับตำแหน่งของ service-worker.js เอง
 var PRECACHE = [
@@ -12,11 +12,14 @@ var PRECACHE = [
   './style.css',
   './script.js',
   './manifest.json',
+  './apple-touch-icon.png',
   './assets/icons/logo-rounded-96-v2.png',
   './assets/icons/favicon-16-v2.png',
   './assets/icons/favicon-32-v2.png',
   './assets/icons/favicon-48-v2.png',
-  './assets/icons/apple-touch-icon-v2.png',
+  './assets/icons/favicon-64.png',
+  './assets/icons/apple-touch-icon-152.png',
+  './assets/icons/apple-touch-icon-167.png',
   './assets/icons/icon-192-v2.png',
   './assets/icons/icon-384-v2.png',
   './assets/icons/icon-512-v2.png',
