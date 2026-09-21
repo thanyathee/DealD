@@ -385,20 +385,33 @@ body {
 .result-row dt { min-width: 0; }
 .result-row dd { flex: none; }
 
-/* ---------- ประโยคสรุปท้ายการ์ด ---------- */
+/* ---------- บรรทัดสรุปเงินที่ประหยัด ---------- */
 
 .result-sentence {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
   margin: 10px 0 0;
   padding-top: 10px;
   font-size: 15px;
-  line-height: 1.55;
+  line-height: 1.5;
   color: var(--ink-700);
   border-top: 1px solid var(--green-100);
 }
 
-.result-sentence.is-waiting {
-  font-size: 13.5px;
+.sentence-left { min-width: 0; }
+
+.sentence-right {
+  flex: none;
+  margin-left: auto; /* ชิดขวาเสมอ แม้ตอนตกบรรทัด */
+}
+
+.sentence-sep {
+  margin: 0 2px;
   color: var(--ink-300);
+  font-weight: 400;
 }
 
 .sentence-num {
@@ -414,6 +427,21 @@ body {
   color: var(--green-700);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+/* บอกว่าเทียบกับแบบไหน ขึ้นเฉพาะตอนมีมากกว่า 2 แบบ */
+.sentence-note {
+  flex: 1 0 100%;
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--ink-500);
+}
+
+/* สถานะรอข้อมูล เป็นข้อความบรรทัดเดียว */
+.result-sentence.is-waiting {
+  display: block;
+  font-size: 13.5px;
+  color: var(--ink-300);
 }
 
 /* ---------- อื่น ๆ ---------- */

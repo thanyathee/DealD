@@ -287,22 +287,40 @@
     rowsEl.appendChild(row);
   }
 
+  function el(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
   /**
-   * ประกอบประโยคสรุปจากชิ้นส่วน
-   * string ธรรมดา = ข้อความปกติ, { text, cls } = ส่วนที่ต้องเน้น
+   * บรรทัดสรุปเงินที่ประหยัด
+   * รูปแบบ:  ถ้าซื้อ [หน่วย] หน่วย > [แบบที่ N]      จะประหยัด [เงิน] บาท
    */
-  function renderSentence(parts) {
+  function renderSavingLine(units, bestLabel, saving, compareLabel) {
+    sentenceEl.className = 'result-sentence';
     sentenceEl.textContent = '';
-    parts.forEach(function (part) {
-      if (typeof part === 'string') {
-        sentenceEl.appendChild(document.createTextNode(part));
-        return;
-      }
-      var span = document.createElement('span');
-      span.className = part.cls;
-      span.textContent = part.text;
-      sentenceEl.appendChild(span);
-    });
+
+    var left = el('span', 'sentence-left');
+    left.appendChild(document.createTextNode('ถ้าซื้อ '));
+    left.appendChild(el('span', 'sentence-num', formatNumber(units, 4, 0)));
+    left.appendChild(document.createTextNode(' หน่วย '));
+    left.appendChild(el('span', 'sentence-sep', '>'));
+    left.appendChild(document.createTextNode(' '));
+    left.appendChild(el('span', 'sentence-num', bestLabel));
+
+    var right = el('span', 'sentence-right');
+    right.appendChild(document.createTextNode('จะประหยัด '));
+    right.appendChild(el('span', 'sentence-save', formatNumber(saving) + ' บาท'));
+
+    sentenceEl.appendChild(left);
+    sentenceEl.appendChild(right);
+
+    // เทียบกับแบบไหน จำเป็นเฉพาะตอนมีมากกว่า 2 แบบ
+    if (compareLabel) {
+      sentenceEl.appendChild(el('span', 'sentence-note', 'เทียบกับ' + compareLabel + ' ที่ราคาต่อหน่วยสูงสุด'));
+    }
   }
 
   /* การ์ดสรุปแสดงค้างไว้เสมอ ยังไม่มีข้อมูลพอก็ขึ้นเป็นขีด */
@@ -349,17 +367,12 @@
     addRow('ถูกกว่าหน่วยละ', formatNumber(diff) + ' บาท');
     addRow('หรือถูกกว่า', formatPercent(percent) + ' %');
 
-    sentenceEl.className = 'result-sentence';
-    renderSentence([
-      'ซื้อ ',
-      { text: formatNumber(best.units, 4, 0), cls: 'sentence-num' },
-      ' หน่วย ',
-      { text: best.labelFull, cls: 'sentence-num' },
-      ' ประหยัด ',
-      { text: formatNumber(saving) + ' บาท', cls: 'sentence-save' },
-      ' เมื่อเทียบกับ',
-      { text: worst.labelFull, cls: 'sentence-num' }
-    ]);
+    renderSavingLine(
+      best.units,
+      best.labelFull,
+      saving,
+      totalItems > 2 ? worst.labelFull : null
+    );
   }
 
   /**
