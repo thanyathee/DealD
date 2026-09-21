@@ -19,7 +19,7 @@
     fixErrors: 'กรุณาตรวจสอบข้อมูลที่กรอก แล้วลองอีกครั้ง'
   };
 
-  var form, itemsEl, countEl, resultEl, headlineEl, rowsEl, formErrorEl, resetBtn;
+  var form, itemsEl, countEl, resultEl, headlineEl, rowsEl, sentenceEl, formErrorEl, resetBtn;
 
   /* ---------- ตัวเลข ---------- */
 
@@ -287,6 +287,24 @@
     rowsEl.appendChild(row);
   }
 
+  /**
+   * ประกอบประโยคสรุปจากชิ้นส่วน
+   * string ธรรมดา = ข้อความปกติ, { text, cls } = ส่วนที่ต้องเน้น
+   */
+  function renderSentence(parts) {
+    sentenceEl.textContent = '';
+    parts.forEach(function (part) {
+      if (typeof part === 'string') {
+        sentenceEl.appendChild(document.createTextNode(part));
+        return;
+      }
+      var span = document.createElement('span');
+      span.className = part.cls;
+      span.textContent = part.text;
+      sentenceEl.appendChild(span);
+    });
+  }
+
   /* การ์ดสรุปแสดงค้างไว้เสมอ ยังไม่มีข้อมูลพอก็ขึ้นเป็นขีด */
   function renderWaiting() {
     headlineEl.textContent = 'กรอกราคาและจำนวนหน่วยอย่างน้อย 2 แบบ';
@@ -294,7 +312,8 @@
     rowsEl.textContent = '';
     addRow('ถูกกว่าหน่วยละ', '— บาท', { muted: true });
     addRow('หรือถูกกว่า', '— %', { muted: true });
-    addRow('จะประหยัด', '— บาท', { muted: true });
+    sentenceEl.className = 'result-sentence is-waiting';
+    sentenceEl.textContent = 'กรอกครบแล้วจะสรุปให้ว่าซื้อแบบไหนประหยัดกว่ากี่บาท';
   }
 
   function renderResult(valid, totalItems) {
@@ -314,6 +333,8 @@
     if (allEqual) {
       headlineEl.textContent = 'ราคาต่อหน่วยเท่ากันทุกแบบ';
       addRow('ราคาต่อหน่วย', formatNumber(best.unitPrice) + ' บาท', { highlight: true });
+      sentenceEl.className = 'result-sentence is-waiting';
+      sentenceEl.textContent = 'ไม่ว่าจะเลือกแบบไหนก็จ่ายเท่ากัน';
       return;
     }
 
@@ -325,17 +346,20 @@
     var percent = worst.unitPrice > 0 ? (diff / worst.unitPrice) * 100 : 0;
     var saving = best.units * diff;
 
-    if (totalItems > 2) {
-      addRow('เทียบกับ' + worst.labelFull + ' (ราคาต่อหน่วยสูงสุด)', formatNumber(worst.unitPrice) + ' บาท');
-    }
-
     addRow('ถูกกว่าหน่วยละ', formatNumber(diff) + ' บาท');
     addRow('หรือถูกกว่า', formatPercent(percent) + ' %');
-    addRow(
-      'ถ้าซื้อ' + best.labelFull + ' (' + formatNumber(best.units, 4, 0) + ' หน่วย) จะประหยัด',
-      formatNumber(saving) + ' บาท',
-      { highlight: true }
-    );
+
+    sentenceEl.className = 'result-sentence';
+    renderSentence([
+      'ซื้อ ',
+      { text: formatNumber(best.units, 4, 0), cls: 'sentence-num' },
+      ' หน่วย ',
+      { text: best.labelFull, cls: 'sentence-num' },
+      ' ประหยัด ',
+      { text: formatNumber(saving) + ' บาท', cls: 'sentence-save' },
+      ' เมื่อเทียบกับ',
+      { text: worst.labelFull, cls: 'sentence-num' }
+    ]);
   }
 
   /**
@@ -448,6 +472,7 @@
     resultEl = document.getElementById('result');
     headlineEl = document.getElementById('result-headline');
     rowsEl = document.getElementById('result-rows');
+    sentenceEl = document.getElementById('result-sentence');
     formErrorEl = document.getElementById('form-error');
     resetBtn = document.getElementById('btn-reset');
 

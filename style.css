@@ -385,6 +385,37 @@ body {
 .result-row dt { min-width: 0; }
 .result-row dd { flex: none; }
 
+/* ---------- ประโยคสรุปท้ายการ์ด ---------- */
+
+.result-sentence {
+  margin: 10px 0 0;
+  padding-top: 10px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-700);
+  border-top: 1px solid var(--green-100);
+}
+
+.result-sentence.is-waiting {
+  font-size: 13.5px;
+  color: var(--ink-300);
+}
+
+.sentence-num {
+  font-weight: 700;
+  color: var(--ink-900);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sentence-save {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--green-700);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 /* ---------- อื่น ๆ ---------- */
 
 .noscript {
@@ -411,6 +442,7 @@ body {
 
 body:has(#items > .item-row:nth-child(4)) .item-row { padding: 2px 0; }
 body:has(#items > .item-row:nth-child(4)) .result-row { padding: 3px 0; }
+body:has(#items > .item-row:nth-child(4)) .result-sentence { margin-top: 7px; padding-top: 7px; font-size: 14px; }
 body:has(#items > .item-row:nth-child(4)) .container {
   padding-top: 8px;
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
