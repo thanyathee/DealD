@@ -28,11 +28,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # ต้องเปิด GitHub Pages ไว้ก่อนที่ Settings > Pages > Source: GitHub Actions
+      # (GITHUB_TOKEN ของ workflow ไม่มีสิทธิ์เปิด Pages ให้เองได้)
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        with:
-          # เปิดใช้งาน GitHub Pages ให้อัตโนมัติถ้ายังไม่ได้เปิดไว้
-          enablement: true
 
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
