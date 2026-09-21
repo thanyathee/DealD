@@ -3,7 +3,7 @@
    ใช้ relative path ทั้งหมด จึงทำงานได้ทั้งที่ root และที่ /DealD/ บน GitHub Pages
    ========================================================================== */
 
-var CACHE_NAME = 'deald-v5';
+var CACHE_NAME = 'deald-v6';
 
 // path เหล่านี้ resolve เทียบกับตำแหน่งของ service-worker.js เอง
 var PRECACHE = [
